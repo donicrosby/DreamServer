@@ -1165,10 +1165,14 @@ disown "`$pid" 2>/dev/null || true
 
                         $upgradeAction = New-ScheduledTaskAction -Execute $bashPath -Argument ('"{0}"' -f $wrapperScript)
                         $upgradeTrigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(1)
+                        $upgradeSettings = New-ScheduledTaskSettingsSet `
+                            -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries `
+                            -StartWhenAvailable -ExecutionTimeLimit ([TimeSpan]::Zero)
                         $upgradePrincipal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive -RunLevel Highest
                         Register-ScheduledTask -TaskName $upgradeTaskName `
                             -Action $upgradeAction `
                             -Trigger $upgradeTrigger `
+                            -Settings $upgradeSettings `
                             -Principal $upgradePrincipal `
                             -Description "Dream Server background model upgrade" `
                             -Force | Out-Null

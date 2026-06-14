@@ -202,7 +202,13 @@ if "Start-Process -FilePath $bashPath" in block or "-Wait" in block:
     raise SystemExit("model upgrade launcher stays in the installer process tree")
 for needle in (
     "New-ScheduledTaskAction -Execute $bashPath",
+    "$upgradeSettings = New-ScheduledTaskSettingsSet",
+    "-AllowStartIfOnBatteries",
+    "-DontStopIfGoingOnBatteries",
+    "-StartWhenAvailable",
+    "-ExecutionTimeLimit ([TimeSpan]::Zero)",
     "Register-ScheduledTask -TaskName $upgradeTaskName",
+    "-Settings $upgradeSettings",
     "Start-ScheduledTask -TaskName $upgradeTaskName",
 ):
     if needle not in block:
