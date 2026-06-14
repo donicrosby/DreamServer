@@ -711,7 +711,7 @@ patch_hermes_model_after_swap() {
 
     log "Patching Hermes config after full-model swap: ${old_model} -> ${new_model}"
     hermes_request_timeout=180
-    if is_windows_bash; then
+    if is_windows_bash || [[ "$runtime" == "lemonade" || "$llm_backend" == "lemonade" ]]; then
         hermes_request_timeout=900
     fi
 
@@ -1586,7 +1586,8 @@ LITELLM_UPGRADE_EOF
         fi
         log "Patching Hermes config: model.default $_hermes_old_model -> $_hermes_new_model"
         _hermes_request_timeout=180
-        if is_windows_bash; then
+        _hermes_llm_backend_for_timeout="$(read_env_value LLM_BACKEND | tr '[:upper:]' '[:lower:]')"
+        if is_windows_bash || [[ "$_gpu_backend_for_hermes" == "amd" || "$_hermes_llm_backend_for_timeout" == "lemonade" ]]; then
             _hermes_request_timeout=900
         fi
 
