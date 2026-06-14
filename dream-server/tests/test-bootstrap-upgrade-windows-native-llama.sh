@@ -202,6 +202,10 @@ grep -q 'api_base: http://host.docker.internal:8080/v1' "$install_dir/config/lit
     || fail "LiteLLM local config should route to the native Windows llama-server host endpoint"
 grep -q 'enable_thinking: false' "$install_dir/config/litellm/local.yaml" \
     || fail "LiteLLM local config should disable Qwen thinking for native Windows llama-server"
+grep -q '^  request_timeout: 900$' "$install_dir/config/litellm/local.yaml" \
+    || fail "LiteLLM local config should keep long-model request timeout for native Windows llama-server"
+grep -q '^  stream_timeout: 900$' "$install_dir/config/litellm/local.yaml" \
+    || fail "LiteLLM local config should keep long-model stream timeout for native Windows llama-server"
 ! grep -q 'api_base: http://llama-server:8080/v1' "$install_dir/config/litellm/local.yaml" \
     || fail "LiteLLM local config must not point at the absent llama-server container"
 grep -q 'restart dream-litellm' "$docker_trace" \

@@ -81,8 +81,11 @@ echo "[contract] Lemonade LiteLLM config has no master_key"
 if [[ -f config/litellm/lemonade.yaml ]]; then
     if grep -q 'master_key' config/litellm/lemonade.yaml; then
         fail "lemonade.yaml: must not contain master_key"
+    elif ! grep -q 'request_timeout: 900' config/litellm/lemonade.yaml \
+        || ! grep -q 'stream_timeout: 900' config/litellm/lemonade.yaml; then
+        fail "lemonade.yaml: must keep long-model proxy timeouts at 900s"
     else
-        pass "lemonade.yaml: no master_key"
+        pass "lemonade.yaml: no master_key and long-model proxy timeouts"
     fi
 else
     fail "lemonade.yaml: file missing"
@@ -418,6 +421,9 @@ if command -v pwsh >/dev/null 2>&1; then
         }
         if ($litellmText -match "api_base: http://llama-server:8080/api/v1") {
             throw "Windows AMD Lemonade LiteLLM config must not route to in-container llama-server"
+        }
+        if ($litellmText -notmatch "(?m)^  request_timeout: 900$" -or $litellmText -notmatch "(?m)^  stream_timeout: 900$") {
+            throw "Windows AMD Lemonade LiteLLM config must keep long-model proxy timeouts at 900s"
         }
 
         Set-Content -LiteralPath (Join-Path $installDir ".env") -Value "WHISPER_PORT=9000`n" -NoNewline

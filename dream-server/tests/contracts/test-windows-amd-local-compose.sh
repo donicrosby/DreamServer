@@ -25,6 +25,10 @@ grep -q 'openai/\*' installers/windows/install-windows.ps1 \
   || { echo "[FAIL] Windows llama-server fallback LiteLLM config must preserve wildcard routing"; exit 1; }
 grep -q 'enable_thinking: false' installers/windows/install-windows.ps1 \
   || { echo "[FAIL] Windows llama-server fallback LiteLLM config must disable Qwen thinking"; exit 1; }
+grep -q 'request_timeout: 900' installers/windows/install-windows.ps1 \
+  || { echo "[FAIL] Windows llama-server fallback LiteLLM config must keep long-model request timeout at 900s"; exit 1; }
+grep -q 'stream_timeout: 900' installers/windows/install-windows.ps1 \
+  || { echo "[FAIL] Windows llama-server fallback LiteLLM config must keep long-model stream timeout at 900s"; exit 1; }
 
 if ! command -v docker >/dev/null 2>&1 || ! docker compose version >/dev/null 2>&1; then
   echo "[SKIP] docker compose unavailable"

@@ -809,8 +809,8 @@ general_settings:
 litellm_settings:
   drop_params: true
   set_verbose: false
-  request_timeout: 120
-  stream_timeout: 60
+  request_timeout: 900
+  stream_timeout: 900
 LITELLM_NATIVE_LOCAL_EOF
 
     if [[ -n "$DOCKER_CMD" ]] && $DOCKER_CMD ps --filter name=dream-litellm --format '{{.Names}}' 2>/dev/null | grep -q dream-litellm; then
@@ -1519,8 +1519,8 @@ model_list:
 litellm_settings:
   drop_params: true
   set_verbose: false
-  request_timeout: 120
-  stream_timeout: 60
+  request_timeout: 900
+  stream_timeout: 900
 LITELLM_UPGRADE_EOF
             fi
             unset _renderer_ok _renderer_script _renderer_py _lemonade_api_base _amd_location _amd_port
