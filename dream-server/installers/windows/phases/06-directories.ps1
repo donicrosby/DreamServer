@@ -87,6 +87,10 @@ $_expectedRegularFiles = @(
     ".env.schema.json",
     "extensions\services\hermes\cli-config.yaml.template",
     "extensions\services\hermes\SOUL.md.template",
+    "extensions\services\hermes-proxy\Caddyfile",
+    "extensions\services\dream-proxy\Caddyfile",
+    "extensions\services\whisper\docker-entrypoint.sh",
+    "extensions\services\perplexica\docker-entrypoint.sh",
     "data\persona\SOUL.md"
 )
 foreach ($_expectedFileName in $_expectedRegularFiles) {
