@@ -245,6 +245,11 @@ services:
       # DREAM_TALK_VISION_KEY.
       - DREAM_TALK_VISION_URL=${DREAM_TALK_VISION_URL:-http://llama-server:8080${LLM_API_BASE_PATH:-/v1}}
       - DREAM_TALK_VISION_KEY=${DREAM_TALK_VISION_KEY:-}
+      # Local models can take several minutes to produce the first useful
+      # Dream Talk frame on cold sessions. Keep the dashboard-api bridge aligned
+      # with Hermes/LiteLLM long-model timeouts so Talk does not 502 while the
+      # underlying agent is still working.
+      - DREAM_TALK_HERMES_TIMEOUT=${DREAM_TALK_HERMES_TIMEOUT:-900}
       # Model id of the vision-capable variant. Defaults to the user.*
       # name we register on AMD install (Qwen3.6-35B-A3B + mmproj-F16).
       - DREAM_TALK_VISION_MODEL=${DREAM_TALK_VISION_MODEL:-user.Qwen3.6-35B-A3B-Vision}

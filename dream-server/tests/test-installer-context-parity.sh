@@ -149,6 +149,22 @@ pass "Hermes patcher updates model.context_length"
 grep -q '^    request_timeout_seconds: 180$' "$tmp_hermes" \
     || fail "Hermes patcher writes local provider request timeout"
 pass "Hermes patcher writes local provider request timeout"
+
+tmp_hermes_windows="$(mktemp)"
+cat > "$tmp_hermes_windows" <<'HERMES_WINDOWS_EOF'
+model:
+  default: "old-model"
+providers:
+  custom:
+    request_timeout_seconds: 180
+HERMES_WINDOWS_EOF
+
+"$python_cmd" scripts/patch-hermes-config.py "$tmp_hermes_windows" \
+    --request-timeout-seconds 900 >/dev/null
+
+grep -q '^    request_timeout_seconds: 900$' "$tmp_hermes_windows" \
+    || fail "Hermes patcher upgrades Dream default provider timeout when requested"
+pass "Hermes patcher upgrades Dream default provider timeout when requested"
 grep -q '^    context_length: 65536$' "$tmp_hermes" \
     || fail "Hermes patcher writes auxiliary compression context"
 pass "Hermes patcher writes auxiliary compression context"
@@ -180,7 +196,8 @@ compression:
   threshold: 0.75
 HERMES_CUSTOM_EOF
 
-"$python_cmd" scripts/patch-hermes-config.py "$tmp_hermes_custom" >/dev/null
+"$python_cmd" scripts/patch-hermes-config.py "$tmp_hermes_custom" \
+    --request-timeout-seconds 900 >/dev/null
 
 grep -q '^    enabled: true$' "$tmp_hermes_custom" \
     || fail "Hermes patcher preserves user-enabled WhatsApp"
